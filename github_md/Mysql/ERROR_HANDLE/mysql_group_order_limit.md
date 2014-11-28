@@ -10,7 +10,7 @@ performed without reading all the rows; a join involving several tables can be p
 ## 前提
 
 ----------------
-Mysql 优化器本就是为了优化SQL语句的查找路径而存在，当优化器足够智能的时候，这是一件美事。但是，如果优化器犯二的时候呢？接下来我们一起来看一下下面的例子：
+Mysql 优化器本就是为了优化SQL语句的查找路径而存在，当优化器足够智能的时候，这是一件美事。但是，如果优化器犯二的时候呢？有的时候执行计划看上去非常好，但是慢的无可救药。有的时候执行计划看上去很差，却跑的很欢。  接下来我们一起来看一下下面的例子：
 
 
 * **表结构**
@@ -136,6 +136,8 @@ dbadmin:abc> show status like 'Han%';
 +----------------------------+----------+
 18 rows in set (0.00 sec)
 
+执行时间：15 rows in set (5 min 36.12 sec)
+
 ```
 
 * **SQL 2**
@@ -176,12 +178,13 @@ dbadmin:abc> show status like 'Han%';
 +----------------------------+----------+
 18 rows in set (0.00 sec)
 
+执行时间：15 rows in set (5 min 38.85 sec)
 
 ```
 * **总结**
-	
-1) 为什么explain中的rows不一样，最终的扫描的Handler_read_prev一样呢？
-			
+
+1. 为什么explain中的rows不一样，最终的扫描的Handler_read_prev一样呢？
+		
 哈哈，只能说explain 中的limit 欺骗了你。。。 [limit optimization](http://dev.mysql.com/doc/refman/5.6/en/limit-optimization.html)
 
 
@@ -248,17 +251,102 @@ mysql> SELECT trace FROM information_schema.OPTIMIZER_TRACE INTO outfile 'trace.
 ```
 
 大家可以很清晰的看到，Mysql在之前还是有很多可以选择的索引，但是最后
-
 reconsidering_access_paths_for_index_ordering 中却选择了brokerid，访问路径为index_scan.
-
 奇了个怪了，为啥？google了一把后，发现之前有类似的bug [Bug #70245](http://bugs.mysql.com/
 bug.php?id=70245),里面说eq_range_index_dive_limit 会影响range查询计划，官方文档确实也是这
+么说的。But，无论我怎么设置eq_range_index_dive_limit的值，丝毫不会影响执行计划
 
-么说的。But，无论我怎么设置eq_range_index_dive_limit的值，丝毫不会影响执行计划.. 这又是为什么
+```
+dbadmin:abc> select @@session.eq_range_index_dive_limit;
++-------------------------------------+
+| @@session.eq_range_index_dive_limit |
++-------------------------------------+
+|                                  10 |
++-------------------------------------+
+1 row in set (0.00 sec)
+以上SQL测试均来自 @@session.eq_range_index_dive_limit。
 
-呢？ -- 这个问题还需要继续跟踪。（这里暂时不继续讨论）
+设置成200（>in(N)）：set @@session.eq_range_index_dive_limit=200;
+
+设置成0(<in(N))，set @@session.eq_range_index_dive_limit=0；
+
+设置成与IN列表中的个数(=in(N))： set @@session.eq_range_index_dive_limit=6；
+
+以上执行计划没有任何变化，跑出来的时间，和上面一样。
+```
 
 **那怎么办呢？**
+
+* **首先**
+
+既然brokerid干扰其优化器的选择，如果我将其drop掉,优化器是否能够选择正确的索引呢？
+
+```
+dbadmin:abc> alter table prop_promotion_data drop index brokerid;
+Query OK, 0 rows affected (0.22 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+dbadmin:abc> explain select distinct  `brokerid`  from `prop_promotion_data`  where `cst_broker_company_ids` in ( '59494' , '59499' , '59502' , '59727' , '60119' , '93204' )  and `report_date` >= '20141101'  and `report_date` <= '20141126'  order by `brokerid` desc limit 15,15;
++----+-------------+---------------------+-------+----------------------+----------+---------+------+------+--------------------------------------------------------+
+| id | select_type | table               | type  | possible_keys        | key      | key_len | ref  | rows | Extra                                                  |
++----+-------------+---------------------+-------+----------------------+----------+---------+------+------+--------------------------------------------------------+
+|  1 | SIMPLE      | prop_promotion_data | range | report_date,cst_date | cst_date | 8       | NULL |  780 | Using index condition; Using temporary; Using filesort |
++----+-------------+---------------------+-------+----------------------+----------+---------+------+------+--------------------------------------------------------+
+1 row in set (0.00 sec)
+
+dbadmin:abc> flush status;
+Query OK, 0 rows affected (0.00 sec)
+
+dbadmin:abc> select distinct  `brokerid`  from `prop_promotion_data`  where `cst_broker_company_ids` in ( '59494' , '59499' , '59502' , '59727' , '60119' , '93204' )  and `report_date` >= '20141101'  and `report_date` <= '20141126'  order by `brokerid` desc limit 15,15;
++----------+
+| brokerid |
++----------+
+|  2112641 |
+|  2111870 |
+|  2076429 |
+|  2072897 |
+|  1988209 |
+|  1897956 |
+|  1816767 |
+|  1767494 |
+|  1754405 |
+|  1709879 |
+|  1628017 |
+|  1587473 |
+|  1582185 |
+|  1574712 |
+|  1562055 |
++----------+
+15 rows in set (0.11 sec)
+
+dbadmin:abc> show status like 'Hand%';
++----------------------------+-------+
+| Variable_name              | Value |
++----------------------------+-------+
+| Handler_commit             | 1     |
+| Handler_delete             | 0     |
+| Handler_discover           | 0     |
+| Handler_external_lock      | 2     |
+| Handler_mrr_init           | 0     |
+| Handler_prepare            | 0     |
+| Handler_read_first         | 0     |
+| Handler_read_key           | 6     |
+| Handler_read_last          | 0     |
+| Handler_read_next          | 781   |
+| Handler_read_prev          | 0     |
+| Handler_read_rnd           | 30    |
+| Handler_read_rnd_next      | 36    |
+| Handler_rollback           | 0     |
+| Handler_savepoint          | 0     |
+| Handler_savepoint_rollback | 0     |
+| Handler_update             | 0     |
+| Handler_write              | 781   |
++----------------------------+-------+
+18 rows in set (0.00 sec)
+```
+**果然，Mysql选择了正确的索引，跑起来还不错。但是那个索引要经常被用到，不能被删除，结果这条道路是走不通的。**
+
+* **其次**
 
 再回头看看trace的选择，里面有关于"clause": "GROUP BY"？  我就再想，是不是由于Group by的原因呢？不清楚，那就试试呗，于是将distinct去掉，试试看
 
@@ -389,6 +477,8 @@ dbadmin:abc> select  `brokerid`  from `prop_promotion_data`  where `cst_broker_c
 +----------+
 15 rows in set (0.01 sec)
 
+
+PS：为了保证SQL的效率的准确性，以上SQL均重启后第一次跑的时间为准。
 ```
 
 * **总结**
