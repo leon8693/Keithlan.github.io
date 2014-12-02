@@ -5,7 +5,7 @@
 
 ## 背景说明
 ------------
-备份和恢复，这是一个非常大的话题，单这不是本章的重点，关于详情，请看之前分享过的一篇PDF [Mysql Backup and Recovery 分享](https://github.com/Keithlan/Keithlan.github.io/tree/master/github_md/Mysql/BACKUP_RECOVERY) 。 备份，主要是用于灾难恢复。 那么，今天我们就来讨论一下再没有备份的前提下，如果从master上恢复一台slave出来？
+备份和恢复，这是一个非常大的话题，但这不是本章的重点，关于详情，请看之前分享过的一篇PDF [Mysql Backup and Recovery 分享](https://github.com/Keithlan/Keithlan.github.io/tree/master/github_md/Mysql/BACKUP_RECOVERY) 。 备份，主要是用于灾难恢复。 那么，今天我们就来讨论一下再没有备份的前提下，如果从master上恢复一台slave出来？
 
 
 ## 前提
@@ -59,7 +59,7 @@
  	4. unlock tables； 
 * 第四步：修补第二步和第三步 max（主键）中的空洞。  
 * 第五步：repair 部分表，可以用同步机制自动检测且修复，无须人为关心。
-
+* 第六步：在slave上，开启同步
 ```
 
 * **方案二的优点和缺点：**
