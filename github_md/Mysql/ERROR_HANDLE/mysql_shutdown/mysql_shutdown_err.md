@@ -43,7 +43,7 @@
 
 大家都知道，mysqld_safe 是 启动mysql的守护进程，我想89不离10，应该是由它重启的，那就一窥究竟吧。
 
-源码文件如下： [mysqld_safe](http://gitlab.corp.anjuke.com/_dba/blog/blob/master/Keithlan/mysql/ERROR_HANDLE/mysql_shutdown/mysqld_safe)
+源码文件如下： [mysqld_safe](https://github.com/Keithlan/Keithlan.github.io/blob/master/github_md/Mysql/ERROR_HANDLE/mysql_shutdown/mysql_shutdown_err.md)
 
 下面是部分重要的部分，特拿出来分析,其中添加了一些注释和一些方便调试的断点代码（add by keithlan）。
 
