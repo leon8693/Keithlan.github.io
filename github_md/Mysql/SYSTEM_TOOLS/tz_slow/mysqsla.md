@@ -502,7 +502,6 @@ sample
 
 5）mysqlsla 的bug list，以及如何修复？
 
-敬请关注下一节mysqlsla源码分析。
-
+敬请关注下一节[mysqlsla源码分析](https://github.com/Keithlan/Keithlan.github.io/blob/master/github_md/Mysql/SYSTEM_TOOLS/tz_slow/mysqlsla_source_read.md)。
 
 
