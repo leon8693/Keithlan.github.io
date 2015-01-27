@@ -141,7 +141,7 @@ set_MySQL_reserved_words|
 
 ## main 主要流程图
 
-![test](image/mysqlsla_main.png "test")
+ ![test](image/mysqlsla_main.png "test")
 
 
 
