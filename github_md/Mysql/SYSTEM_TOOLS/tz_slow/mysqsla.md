@@ -232,56 +232,246 @@ udl|无|无|无
 	report line values
 ```
 
-一个自定义的高级模板
+一个自定义的slow标准模板
 
 ```
-01 -nthp 02
-03 HEADER
-04 Reportfor%slogs:%s
-05 lt:oplogs
-06 %dqueriestotal,%dunique
-07 total_queries,total_unique_queries
-08 Sortedby'%s'
-09 sort:op
-10 GrandTotals:Time%ss,Lock%ss,Rowssent%s,RowsExamined%s
-11 gt_t:shortgt_l:shortgt_rs:shortgt_re:short
-12
-13 REPORT 14
-15 ______________________________________________________________________%03d___
-16 sort_rank
-17 Count :%s (%.2f%%)
-18 c_sum:shortc_sum_p
-19 Time :%stotal,%savg,%sto%smax (%.2f%%)
-20 t_sum:microt_avg:microt_min:microt_max:microt_sum_p
-21 ?%3s%%ofTime:%stotal,%savg,%sto%smax
-22 nthp:opt_sum_nthp:microt_avg_nthp:microt_min_nthp:microt_max_nthp:micro
-23 ?Distribution:%s
-24 t_dist
-25 LockTime :%stotal,%savg,%sto%smax (%.2f%%)
-26 l_sum:microl_avg:microl_min:microl_max:microl_sum_p
-27 ?%3s%%ofLock:%stotal,%savg,%sto%smax
-28 nthp:opl_sum_nthp:microl_avg_nthp:microl_min_nthp:microl_max_nthp:micro
-29 Rowssent :%savg,%sto%smax (%.2f%%)
-30 rs_avg:shortrs_min:shortrs_max:shortrs_sum_p
-31 Rowsexamined:%savg,%sto%smax (%.2f%%)
-32 re_avg:shortre_min:shortre_max:shortre_sum_p
-33 Database :%s
-34 db
-35 Users :%s
-36 users
-37 ?EXPLAIN :%s
-38 explain
-39
-40 Queryabstract:
-41 _
-42 %s
-43 query:cap
-44
-45 Querysample:
-46 _
-47 %s
-48 sample
+-nthp
+HEADER
+Report for %s logs: %s
+lt:op logs
+%s queries total, %s unique
+total_queries:short total_unique_queries:short
+Sorted by '%s'
+sort:op
+Grand Totals: Time %s s, Lock %s s, Rows sent %s, Rows Examined %s
+gt_t:short gt_l:short gt_rs:short gt_re:short
+REPORT
+______________________________________________________________________ %03d ___
+sort_rank
+Count         : %s  (%.2f%%)
+c_sum:short c_sum_p
+Time          : %s total, %s avg, %s to %s max  (%.2f%%)
+t_sum:micro t_avg:micro t_min:micro t_max:micro t_sum_p
+? %3s%% of Time : %s total, %s avg, %s to %s max
+nthp:op t_sum_nthp:micro t_avg_nthp:micro t_min_nthp:micro t_max_nthp:micro
+? Distribution : %s
+t_dist
+Lock Time (s) : %s total, %s avg, %s to %s max  (%.2f%%)
+l_sum:micro l_avg:micro l_min:micro l_max:micro l_sum_p
+? %3s%% of Lock : %s total, %s avg, %s to %s max
+nthp:op l_sum_nthp:micro l_avg_nthp:micro l_min_nthp:micro l_max_nthp:micro
+Rows sent     : %s avg, %s to %s max  (%.2f%%)
+rs_avg:short rs_min:short rs_max:short rs_sum_p
+Rows examined : %s avg, %s to %s max  (%.2f%%)
+re_avg:short re_min:short re_max:short re_sum_p
+Database      : %s
+db
+Users         : %s
+users
+?Table:#rows   : %s
+tcount
+?Table schemas : %s
+tschema
+?EXPLAIN       : %s
+explain
+Query abstract:
+_
+%s
+query:cap
+Query sample:
+_
+%s
+sample
 
+```
+
+一个自定义的general log标准模板
+
+```
+HEADER
+Report for %s logs: %s
+lt:op logs
+%s queries total, %s unique
+total_queries:short total_unique_queries:short
+Sorted by '%s'
+sort:op
+REPORT
+______________________________________________________________________ %03d ___
+sort_rank
+Count         : %s (%.2f%%)
+c_sum:short c_sum_p
+Connection ID : %d
+cid
+Database      : %s
+db
+Users         : %s
+users
+?Table:#rows   : %s
+tcount
+?Table schemas : %s
+tschema
+?EXPLAIN       : %s
+explain
+Query abstract:
+_
+%s
+query:cap
+Query sample:
+_
+%s
+sample
+
+```
+
+一个自定义的binary log标准模板
+
+```
+HEADER
+Report for %s logs: %s
+lt:op logs
+%s queries total, %s unique
+total_queries:short total_unique_queries:short
+Sorted by '%s'
+sort:op
+REPORT
+______________________________________________________________________ %03d ___
+sort_rank
+Count             : %s (%.2f%%)
+c_sum:short c_sum_p
+Connection ID     : %d
+cid
+Server ID         : %d
+sid
+Error code        : %d
+err
+Execution Time (s): %d total, %d avg, %d to %d max
+ext_sum ext_avg ext_min ext_max
+? %3s%% of Ex Time: %d total, %d avg, %d to %d max
+nthp:op ext_sum_nthp ext_avg_nthp ext_min_nthp ext_max_nthp
+Database          : %s
+db
+Users             : %s
+users
+Query abstract:
+_
+%s
+query:cap
+Query sample:
+_
+%s
+sample
+
+```
+
+一个自定义的msl log标准模板
+
+```
+HEADER
+Report for %s logs: %s
+lt:op logs
+%s queries total, %s unique
+total_queries:short total_unique_queries:short
+Sorted by '%s'
+sort:op
+Grand Totals: Time %.3f s, Lock %.3f s, Rows sent %s, Rows Examined %s
+gt_t gt_l gt_rs:short gt_re:short
+REPORT
+______________________________________________________________________ %03d ___
+sort_rank
+Count         : %s  (%.2f%%)
+c_sum:short c_sum_p
+Time          : %s total, %s avg, %s to %s max  (%.2f%%)
+t_sum:micro t_avg:micro t_min:micro t_max:micro t_sum_p
+? %3s%% of Time : %s total, %s avg, %s to %s max
+nthp:op t_sum_nthp:micro t_avg_nthp:micro t_min_nthp:micro t_max_nthp:micro
+Lock Time     : %s total, %s avg, %s to %s max  (%.2f%%)
+l_sum:micro l_avg:micro l_min:micro l_max:micro l_sum_p
+? %3s%% of Lock : %s total, %s avg, %s to %s max
+nthp:op l_sum_nthp:micro l_avg_nthp:micro l_min_nthp:micro l_max_nthp:micro
+Rows sent     : %s avg, %s to %s max  (%.2f%%)
+rs_avg:short rs_min:short rs_max:short  rs_sum_p
+Rows examined : %s avg, %s to %s max  (%.2f%%)
+re_avg:short re_min:short re_max:short  re_sum_p
+Database      : %s
+db
+Users         : %s
+users
+?Table:#rows   : %s
+tcount
+?Table schemas : %s
+tschema
+?EXPLAIN       : %s
+explain
+?QC hit        : %d%% (%d)
+qchit_t_p qchit_t
+?Full scan     : %d%% (%d)
+fullscan_t_p fullscan_t
+?Full join     : %d%% (%d)
+fulljoin_t_p fulljoin_t
+?Tmp table     : %d%% (%d)
+tmptable_t_p tmptable_t
+?Disk tmp table: %d%% (%d)
+disktmptable_t_p disktmptable_t
+?Filesort      : %d%% (%d)
+filesort_t_p filesort_t
+?Disk filesort : %d%% (%d)
+diskfilesort_t_p diskfilesort_t
+?Merge passes  : %s total, %s avg, %s to %s max
+merge_sum:short  merge_avg:short merge_min:short merge_max:short
+?IO r ops      : %s total, %s avg, %s to %s max  (%.2f%%)
+iorops_sum:short iorops_avg:short iorops_min:short iorops_max:short iorops_sum_p
+?IO r bytes    : %s total, %s avg, %s to %s max  (%.2f%%)
+iorbytes_sum:short iorbytes_avg:short iorbytes_min:short iorbytes_max:short iorbytes_sum_p
+?IO r wait     : %s total, %s avg, %s to %s max  (%.2f%%)
+iorwait_sum:micro iorwait_avg:micro iorwait_min:micro iorwait_max:micro iorwait_sum_p
+?Rec lock wait : %s total, %s avg, %s to %s max  (%.2f%%)
+reclwait_sum:micro reclwait_avg:micro reclwait_min:micro reclwait_max:micro reclwait_sum_p
+?Queue wait    : %s total, %s avg, %s to %s max  (%.2f%%)
+qwait_sum:micro qwait_avg:micro qwait_min:micro qwait_max:micro qwait_sum_p
+?Pages distinct: %s total, %s avg, %s to %s max  (%.2f%%)
+pages_sum:short pages_avg:short pages_min:short pages_max:short pages_sum_p
+Query abstract:
+_
+%s
+query:cap
+Query sample:
+_
+%s
+sample
+
+```
+
+一个自定义的udl log标准模板
+
+```
+HEADER
+Report for %s logs: %s
+lt:op logs
+%s queries total, %s unique
+total_queries:short total_unique_queries:short
+Sorted by '%s'
+sort:op
+REPORT
+______________________________________________________________________ %03d ___
+sort_rank
+Count         : %s (%.2f%%)
+c_sum:short c_sum_p
+Database      : %s
+db
+?Table:#rows   : %s
+tcount
+?Table schemas : %s
+tschema
+?EXPLAIN       : %s
+explain
+Query abstract:
+_
+%s
+query:cap
+Query sample:
+_
+%s
+sample
 ```
 
 这也就是平时看到的默认格式。个人觉得这个功能非常好用，当然标准格式就已经满足90%的需求，当然对于比较特殊的需求，可以做特殊的格式化输出。
