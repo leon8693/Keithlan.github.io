@@ -6,6 +6,7 @@
 │   │   └── <a href="https://github.com/Keithlan/Keithlan.github.io/tree/master/github_md//Mysql/BACKUP_RECOVERY/backup_recovery.pdf" target="_self">backup_recovery.pdf</a>
 │   ├── <strong>ERROR_HANDLE</strong>
 │   │   ├── <a href="https://github.com/Keithlan/Keithlan.github.io/tree/master/github_md//Mysql/ERROR_HANDLE/mysql_error_1048.md" target="_self">mysql_error_1048.md</a>
+│   │   ├── <a href="https://github.com/Keithlan/Keithlan.github.io/tree/master/github_md//Mysql/ERROR_HANDLE/mysql_error_1293.md" target="_self">mysql_error_1293.md</a>
 │   │   ├── <a href="https://github.com/Keithlan/Keithlan.github.io/tree/master/github_md//Mysql/ERROR_HANDLE/mysql_group_order_limit.md" target="_self">mysql_group_order_limit.md</a>
 │   │   ├── <a href="https://github.com/Keithlan/Keithlan.github.io/tree/master/github_md//Mysql/ERROR_HANDLE/mysql_in.md" target="_self">mysql_in.md</a>
 │   │   ├── <a href="https://github.com/Keithlan/Keithlan.github.io/tree/master/github_md//Mysql/ERROR_HANDLE/mysql_recovery_myisam_slave.md" target="_self">mysql_recovery_myisam_slave.md</a>
@@ -38,5 +39,5 @@
 └── <strong>p7_apply</strong>
     └── <a href="https://github.com/Keithlan/Keithlan.github.io/tree/master/github_md//p7_apply/p7_apply.md" target="_self">p7_apply.md</a>
 
-18 directories, 20 files
+18 directories, 21 files
 </pre>
