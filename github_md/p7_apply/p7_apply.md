@@ -36,6 +36,8 @@
 
 * [mysql error 1048解决方案](https://github.com/Keithlan/Keithlan.github.io/blob/master/github_md/Mysql/ERROR_HANDLE/mysql_error_1048.md)
 
+* [mysql error 1293深入浅出](https://github.com/Keithlan/Keithlan.github.io/blob/master/github_md/Mysql/ERROR_HANDLE/mysql_error_1293.md)
+
 * [mysql5.6 执行计划错误案例分析](https://github.com/Keithlan/Keithlan.github.io/blob/master/github_md/Mysql/ERROR_HANDLE/mysql_group_order_limit.md)
 
 * [MySQL5.6 中 In 优化的那些事](https://github.com/Keithlan/Keithlan.github.io/blob/master/github_md/Mysql/ERROR_HANDLE/mysql_in.md)
