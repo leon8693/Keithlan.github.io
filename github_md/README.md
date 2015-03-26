@@ -16,6 +16,8 @@
 │   │   └── <strong>Keepalived</strong>
 │   │       └── <a href="https://github.com/Keithlan/Keithlan.github.io/tree/master/github_md//Mysql/HA/Keepalived/Keepalived.md" target="_self">Keepalived.md</a>
 │   ├── <strong>PERFORMANCE_TUNING</strong>
+│   │   ├── <strong>image</strong>
+│   │   ├── <a href="https://github.com/Keithlan/Keithlan.github.io/tree/master/github_md//Mysql/PERFORMANCE_TUNING/mysql_replication_inside.md" target="_self">mysql_replication_inside.md</a>
 │   │   └── <a href="https://github.com/Keithlan/Keithlan.github.io/tree/master/github_md//Mysql/PERFORMANCE_TUNING/数据库性能优化之查询优化_final.pdf" target="_self">数据库性能优化之查询优化_final.pdf</a>
 │   ├── <a href="https://github.com/Keithlan/Keithlan.github.io/tree/master/github_md//Mysql/README.md" target="_self">README.md</a>
 │   ├── <strong>SCRIPT</strong>
@@ -39,5 +41,5 @@
 └── <strong>p7_apply</strong>
     └── <a href="https://github.com/Keithlan/Keithlan.github.io/tree/master/github_md//p7_apply/p7_apply.md" target="_self">p7_apply.md</a>
 
-18 directories, 21 files
+19 directories, 22 files
 </pre>
