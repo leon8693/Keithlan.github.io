@@ -459,7 +459,7 @@ InnoDB在每次提交事务时，为了保证数据已经持久化到磁盘（Du
 * innodb_flush_method 控制的不仅仅是redo log，还包括 数据文件。
 * 即便innodb_flush_method 设置的是任何值如：fdatasync，最终flush阶段，mysql为了考虑安全性，底层调用的是fsync(),而不是fdatasync();
 * 除了O_DIRECT_NO_FSYNC以外，InnoDB都使用fsync()刷新“数据文件”
-* O_DSYNC方式打开文件，可以确保文件写入成功，所以不需要在flush阶段调用fsync()
+* 在open阶段，以O_SYNC方式打开文件，自身必须要求文件最终fsync()写入成功，所以不需要在flush阶段调用fsync()
 
 更直观的图如下：
 
